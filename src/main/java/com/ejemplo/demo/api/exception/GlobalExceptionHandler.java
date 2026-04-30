@@ -43,7 +43,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body);
     }
 
-
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorResponse> manejarReglaDeNegocio(IllegalArgumentException ex) {
         ErrorResponse body = new ErrorResponse(
@@ -53,5 +52,16 @@ public class GlobalExceptionHandler {
                 Map.of()
         );
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorResponse> manejarResourceNotFound(ResourceNotFoundException ex) {
+        ErrorResponse body = new ErrorResponse(
+                "RESOURCE_NOT_FOUND",
+                ex.getMessage(),
+                Instant.now(),
+                Map.of()
+        );
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
     }
 }
