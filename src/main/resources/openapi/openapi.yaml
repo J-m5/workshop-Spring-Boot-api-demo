@@ -1,0 +1,170 @@
+openapi: 3.0.3
+info:
+  title: Workshop Spring Boot API
+  version: 1.0.0
+servers:
+  - url: http://localhost:8081/api/v1
+tags:
+  - name: workshop
+  - name: simulaciones
+  - name: demo-estado
+paths:
+  /:
+    get:
+      tags: [workshop]
+      operationId: getWorkshopHealth
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estado: { type: string }
+                  mensaje: { type: string }
+  /saludos:
+    get:
+      tags: [workshop]
+      operationId: saludarPorGet
+      parameters:
+        - name: nombre
+          in: query
+          required: false
+          schema: { type: string, default: Mundo }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  mensaje: { type: string }
+                  timestamp: { type: string, format: date-time }
+    post:
+      tags: [workshop]
+      operationId: saludarPorPost
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [nombre]
+              properties:
+                nombre: { type: string, maxLength: 50 }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  mensaje: { type: string }
+                  timestamp: { type: string, format: date-time }
+  /simulaciones/prestamo:
+    post:
+      tags: [simulaciones]
+      operationId: simularPrestamo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [monto, tasaAnual, meses]
+              properties:
+                monto: { type: number, format: double }
+                tasaAnual: { type: number, format: double }
+                meses: { type: integer, minimum: 1, maximum: 360 }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  cuotaMensual: { type: number, format: double }
+                  interesTotal: { type: number, format: double }
+                  totalPagar: { type: number, format: double }
+  /demo/estado/singleton:
+    get:
+      tags: [demo-estado]
+      operationId: obtenerSingleton
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tipo: { type: string }
+                  valorActual: { type: string }
+    post:
+      tags: [demo-estado]
+      operationId: actualizarSingleton
+      parameters:
+        - name: valor
+          in: query
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tipo: { type: string }
+                  valorActual: { type: string }
+  /demo/estado/singleton/reset:
+    post:
+      tags: [demo-estado]
+      operationId: reiniciarSingleton
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tipo: { type: string }
+                  valorActual: { type: string }
+  /demo/estado/manual:
+    get:
+      tags: [demo-estado]
+      operationId: obtenerManual
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tipo: { type: string }
+                  valorActual: { type: string }
+    post:
+      tags: [demo-estado]
+      operationId: actualizarManual
+      parameters:
+        - name: valor
+          in: query
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tipo: { type: string }
+                  valorActual: { type: string }
